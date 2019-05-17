@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NugetHelper", "NugetHelper.csproj", "{ECE126A6-F46C-4EC3-B01C-CCBEA2FFF4CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NugetHelper", "src\NugetHelper.csproj", "{ECE126A6-F46C-4EC3-B01C-CCBEA2FFF4CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetHelper.Tests", "tests\NugetHelper.Tests.csproj", "{6D11D3CC-BB55-411C-A7E3-BFB24959F8A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +17,17 @@ Global
 		{ECE126A6-F46C-4EC3-B01C-CCBEA2FFF4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECE126A6-F46C-4EC3-B01C-CCBEA2FFF4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECE126A6-F46C-4EC3-B01C-CCBEA2FFF4CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D11D3CC-BB55-411C-A7E3-BFB24959F8A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D11D3CC-BB55-411C-A7E3-BFB24959F8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D11D3CC-BB55-411C-A7E3-BFB24959F8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D11D3CC-BB55-411C-A7E3-BFB24959F8A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ECE126A6-F46C-4EC3-B01C-CCBEA2FFF4CE} = {87E04526-B012-4BDC-A859-921C3C720959}
+		{6D11D3CC-BB55-411C-A7E3-BFB24959F8A8} = {40EE7AA2-0932-476D-BCD3-9BEBB152B9F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99182A18-47E0-45AE-87E1-F3174F5019CD}

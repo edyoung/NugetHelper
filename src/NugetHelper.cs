@@ -15,17 +15,21 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ConsoleApp5
+namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static async Task Main()
         {
             var packageId = "cake.nuget";
             var packageVersion = NuGetVersion.Parse("0.30.0");
             var nuGetFramework = NuGetFramework.ParseFolder("net46");
             var settings = Settings.LoadDefaultSettings(root: null);
-            var sourceRepositoryProvider = new SourceRepositoryProvider(settings, Repository.Provider.GetCoreV3());
+
+            var packageSourceProvider = new PackageSourceProvider(
+                settings, new PackageSource[] { new PackageSource("https://api.nuget.org/v3/index.json") });
+
+            var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, Repository.Provider.GetCoreV3());
 
             using (var cacheContext = new SourceCacheContext())
             {
