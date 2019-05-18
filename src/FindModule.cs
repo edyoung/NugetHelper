@@ -19,10 +19,11 @@ namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
     {
         public async Task<IEnumerable<IPackageSearchMetadata> > Find(string name, string version)
         {
-            var settings = Settings.LoadDefaultSettings(root: null);
-
+            var settings = NullSettings.Instance; 
             var packageSourceProvider = new PackageSourceProvider(
-                settings, new PackageSource[] { new PackageSource("https://www.powershellgallery.com/api/v2/") });
+                settings, 
+                new PackageSource[] { new PackageSource("https://www.powershellgallery.com/api/v2/") }
+                );
 
             var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, Repository.Provider.GetCoreV3());
 
@@ -38,7 +39,7 @@ namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
                 {
                     var resource = await repo.GetResourceAsync<PackageSearchResource>();
              
-                    var info = await resource.SearchAsync(name, searchFilter, 0, 20, NullLogger.Instance, CancellationToken.None);
+                    var info = await resource.SearchAsync(name, searchFilter, 0, 200, NullLogger.Instance, CancellationToken.None);
                     results = results.Concat(info);
                 }
                 return results;
