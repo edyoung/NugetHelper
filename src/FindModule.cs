@@ -11,17 +11,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
 {
     public class FindModule
     {
-        public async Task<HashSet<SourcePackageDependencyInfo> > Find(string name, string version)
+        public async Task<IEnumerable<IPackageSearchMetadata> > Find(string name, string version)
         {
-            var packageVersion = NuGetVersion.Parse(version);
-            var packageIdentity = new PackageIdentity(name, packageVersion);
-
-            var nuGetFramework = NuGetFramework.ParseFolder("net46");
             var settings = Settings.LoadDefaultSettings(root: null);
 
             var packageSourceProvider = new PackageSourceProvider(
@@ -29,25 +26,24 @@ namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
 
             var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, Repository.Provider.GetCoreV3());
 
-            var availablePackages = new HashSet<SourcePackageDependencyInfo>(PackageIdentityComparer.Default);
-
             using (var cacheContext = new SourceCacheContext())
             {
                 var repositories = sourceRepositoryProvider.GetRepositories();
+
+                IEnumerable<IPackageSearchMetadata> results = new List<IPackageSearchMetadata>();
+
+                var searchFilter = new SearchFilter(true, SearchFilterType.IsAbsoluteLatestVersion);
                 
-                foreach (var sourceRepository in repositories)
+                foreach(var repo in repositories)
                 {
-                    var dependencyInfoResource = await sourceRepository.GetResourceAsync<DependencyInfoResource>();
-                    var dependencyInfo = await dependencyInfoResource.ResolvePackage(
-                        packageIdentity, nuGetFramework, cacheContext, NullLogger.Instance , CancellationToken.None);
-
-                    if (dependencyInfo == null) continue;
-
-                    availablePackages.Add(dependencyInfo);
+                    var resource = await repo.GetResourceAsync<PackageSearchResource>();
+             
+                    var info = await resource.SearchAsync(name, searchFilter, 0, 20, NullLogger.Instance, CancellationToken.None);
+                    results = results.Concat(info);
                 }
+                return results;
+              
             }
-
-            return availablePackages;
         }
     }
 }
