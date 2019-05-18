@@ -16,7 +16,8 @@ namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
         public async Task PSGallery_FindPowerShellGet()
         {
             FindModule f = new FindModule();
-            await f.Find("PowerShellGet","2.1.3");
+            var packages = await f.Find("PowerShellGet","2.1.3");
+            Assert.Equal(1, packages.Count);
         }
     }
 }

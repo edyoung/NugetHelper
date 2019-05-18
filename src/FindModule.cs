@@ -16,7 +16,7 @@ namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
 {
     public class FindModule
     {
-        public async Task Find(string name, string version)
+        public async Task<HashSet<SourcePackageDependencyInfo> > Find(string name, string version)
         {
             var packageVersion = NuGetVersion.Parse(version);
             var packageIdentity = new PackageIdentity(name, packageVersion);
@@ -29,11 +29,12 @@ namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
 
             var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, Repository.Provider.GetCoreV3());
 
+            var availablePackages = new HashSet<SourcePackageDependencyInfo>(PackageIdentityComparer.Default);
+
             using (var cacheContext = new SourceCacheContext())
             {
                 var repositories = sourceRepositoryProvider.GetRepositories();
-                var availablePackages = new HashSet<SourcePackageDependencyInfo>(PackageIdentityComparer.Default);
-
+                
                 foreach (var sourceRepository in repositories)
                 {
                     var dependencyInfoResource = await sourceRepository.GetResourceAsync<DependencyInfoResource>();
@@ -45,6 +46,8 @@ namespace Microsoft.PowerShell.PowerShellGet.NugetHelper
                     availablePackages.Add(dependencyInfo);
                 }
             }
+
+            return availablePackages;
         }
     }
 }
